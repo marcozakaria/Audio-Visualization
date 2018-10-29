@@ -5,7 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class AudioPeer : MonoBehaviour
 {
-    public static float[] audioSamples = new float[512];
+    public static float[] audioSamplesLeft = new float[512];  // for left and right channel
+    public static float[] audioSamplesRight = new float[512];
     public static float[] frequencyBand = new float[8];
     public static float[] bandBuffer = new float[8];  // frequency higher than band , band bufffer become the frequency buffer
     float[] bufferDecrease = new float[8];
@@ -16,7 +17,10 @@ public class AudioPeer : MonoBehaviour
     public static float[] audioBandBuffer = new float[8];
 
     public static float amplitude, amplitudeBuffer; // amplitude gits average  from our 8 bands
-    float amplitudeHieghest;
+    float amplitudeHieghest;                        //sound amplitude is experienced as the loudness of sound.
+
+    public enum Chanell { Sterio,Left,Right};
+    public Chanell chanell;
 
     AudioSource audioSource;
 
@@ -31,13 +35,14 @@ public class AudioPeer : MonoBehaviour
         MakeFrequencyBands();
         BandBuffer();
         CreateAudioBands();
+        GetAmplitude();
     }
 
     void GetAmplitude()
     {
         float currentAmplitude = 0;
         float currentAmplitudeBuffer = 0;
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++) // sum values to gether
         {
             currentAmplitude += audioBand[i];
             currentAmplitudeBuffer += audioBandBuffer[i];
@@ -48,6 +53,7 @@ public class AudioPeer : MonoBehaviour
         }
         amplitude = currentAmplitude / amplitudeHieghest;
         amplitudeBuffer = currentAmplitudeBuffer / amplitudeHieghest;
+        //Debug.Log(amplitude + " : "+ amplitudeBuffer);
     }
 
     void CreateAudioBands()  // help us get value between 0 and 1 
@@ -94,8 +100,19 @@ public class AudioPeer : MonoBehaviour
                 sampleCount += 2;
             }
             for (int j = 0; j < sampleCount; j++) // loop through sampecounts to get there average
-            {
-                average += audioSamples[count] * (count + 1); 
+            {   // find wich channel we choosed before
+                if (chanell == Chanell.Sterio)
+                {
+                    average += (audioSamplesLeft[count] + audioSamplesRight[count]) * (count + 1);
+                }
+                else if (chanell == Chanell.Left)
+                {
+                    average += audioSamplesLeft[count]  * (count + 1);
+                }
+                else if (chanell == Chanell.Right)
+                {
+                    average +=  audioSamplesRight[count] * (count + 1);
+                }
                 count++;
             }
             average /= count;  // divide sum by there count to get average
@@ -105,6 +122,7 @@ public class AudioPeer : MonoBehaviour
 
     void GetSpectrumAudioSource()
     {
-        audioSource.GetSpectrumData(audioSamples, 0, FFTWindow.Blackman);
+        audioSource.GetSpectrumData(audioSamplesLeft, 0, FFTWindow.Blackman);
+        audioSource.GetSpectrumData(audioSamplesRight, 1, FFTWindow.Blackman);
     }
 }

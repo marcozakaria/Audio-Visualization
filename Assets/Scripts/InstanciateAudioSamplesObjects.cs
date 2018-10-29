@@ -33,7 +33,7 @@ public class InstanciateAudioSamplesObjects : MonoBehaviour
         {
             if (sampleCubes != null)
             {   // scale them as they get info from the song
-                sampleCubes[i].transform.localScale = new Vector3(10, AudioPeer.audioSamples[i] * MaxYscale, 10);
+                sampleCubes[i].transform.localScale = new Vector3(10, AudioPeer.audioSamplesLeft[i] * MaxYscale, 10);
             }
         }
 	}
