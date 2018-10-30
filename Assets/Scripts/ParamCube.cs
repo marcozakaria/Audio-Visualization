@@ -18,10 +18,10 @@ public class ParamCube : MonoBehaviour
     private void Update()
     {
         if (!useBuffer)
-        {
+        {   // schange y scale acording to music
             transform.localScale = new Vector3(transform.localScale.x, (AudioPeer.audioBand[band] * scaleMultiplier) + startScale, transform.localScale.z);
             Color color = new Color(AudioPeer.audioBand[band], AudioPeer.audioBand[band], AudioPeer.audioBand[band]);
-            material.SetColor("_EmissionColor",color);
+            material.SetColor("_EmissionColor",color); //change emission color
         }
         else
         {

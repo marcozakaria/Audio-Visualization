@@ -1,10 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [RequireComponent(typeof(AudioSource))]
 public class AudioPeer : MonoBehaviour
 {
+    // Microphone Input
+    public AudioClip audioClip;
+    public bool useMicrophone;
+    public AudioMixerGroup generalMixerGroup, microphooneMixerGroup;
+
     public static float[] audioSamplesLeft = new float[512];  // for left and right channel
     public static float[] audioSamplesRight = new float[512];
     public static float[] frequencyBand = new float[8];
@@ -27,6 +33,26 @@ public class AudioPeer : MonoBehaviour
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
+
+        if (useMicrophone)
+        {
+            if (Microphone.devices.Length > 0) // if there is microphone connected to computer
+            {
+                audioSource.outputAudioMixerGroup = microphooneMixerGroup;
+                audioSource.clip = Microphone.Start(null, true, 10, AudioSettings.outputSampleRate);
+            }
+            else
+            {
+                useMicrophone = false;
+            }
+        }
+        else
+        {
+            audioSource.outputAudioMixerGroup = generalMixerGroup;
+            audioSource.clip = audioClip;
+        }
+
+        audioSource.Play();
     }
 
     private void Update()

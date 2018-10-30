@@ -1486,7 +1486,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: deffa29fff5412848a40ec2a8d2722a8, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1583,6 +1583,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5f582705136f142b077afdfc9e734f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: deffa29fff5412848a40ec2a8d2722a8, type: 3}
+  useMicrophone: 1
+  generalMixerGroup: {fileID: 24300002, guid: 7cb5d59c1deab0245a92525a5dcf11fe, type: 2}
+  microphooneMixerGroup: {fileID: 243090741948436376, guid: 7cb5d59c1deab0245a92525a5dcf11fe,
+    type: 2}
+  chanell: 0
 --- !u!4 &1673938276
 Transform:
   m_ObjectHideFlags: 0
